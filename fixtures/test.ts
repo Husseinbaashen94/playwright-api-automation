@@ -5,9 +5,9 @@ import { CreateBookingResponseSchema, type Booking } from '../schemas/booking';
 import { buildBooking } from './bookingFactory';
 
 export const credentials = {
-  // Public demo credentials published by Restful-Booker; override in CI with env vars.
-  username: process.env.ADMIN_USER ?? 'admin',
-  password: process.env.ADMIN_PASSWORD ?? 'password123',
+  // Defaults are the public demo credentials published by Restful-Booker; set ADMIN_USER / ADMIN_PASSWORD in .env to override.
+  username: process.env.ADMIN_USER || 'admin',
+  password: process.env.ADMIN_PASSWORD || 'password123',
 };
 
 type TestFixtures = {
@@ -26,7 +26,7 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   token: [
     async ({ playwright }, use) => {
       const request = await playwright.request.newContext({
-        baseURL: process.env.BASE_URL ?? 'https://restful-booker.herokuapp.com',
+        baseURL: process.env.BASE_URL || 'https://restful-booker.herokuapp.com',
       });
       const response = await request.post('/auth', { data: credentials });
       const { token } = await response.json();

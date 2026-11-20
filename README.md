@@ -45,16 +45,60 @@ fixtures/
 tests/                     # health-and-auth, booking-crud, booking-filters, booking-negative
 ```
 
-## Run it
+## Getting started
 
-Requires Node.js 18+.
+### 1. Prerequisites
+
+| Tool | Version | Check | Install |
+|------|---------|-------|---------|
+| Node.js | 20.12 or newer (22 LTS recommended) | `node -v` | [nodejs.org](https://nodejs.org/) |
+| Git | any recent | `git --version` | [git-scm.com](https://git-scm.com/downloads) |
+
+No browsers are needed: these tests use Playwright's HTTP client only.
+
+### 2. Clone and install
 
 ```bash
+git clone https://github.com/Husseinbaashen94/playwright-api-automation.git
+cd playwright-api-automation
 npm install
-npm test             # run the suite
-npm run report       # open the HTML report
-BASE_URL=http://localhost:3001 npm test   # point at a local Restful-Booker
 ```
+
+### 3. Configure (optional)
+
+Everything works out of the box. To change a setting, copy the template and fill in only what you need:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Purpose and default |
+|----------|---------------------|
+| `BASE_URL` | API under test. Default `https://restful-booker.herokuapp.com` |
+| `ADMIN_USER` | Login used for `/auth`. Default: Restful-Booker's public demo user |
+| `ADMIN_PASSWORD` | Password for that login. Default: the public demo password |
+
+Empty values use the default. `.env` is git-ignored, so nothing you put in it is ever committed.
+
+### 4. Run the tests
+
+```bash
+npm test                                         # all API tests
+npx playwright test tests/booking-crud.spec.ts   # one file
+npx playwright test -g "403"                     # tests whose name matches
+npm run typecheck                                # TypeScript check
+```
+
+### 5. View the report
+
+Run `npm run report` to open the HTML report.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Many tests fail with `503` / timeouts | The public demo API sleeps when idle; run again after a minute |
+| `Could not obtain an auth token` | Check `ADMIN_USER` / `ADMIN_PASSWORD` in `.env`, or leave them empty |
 
 ## CI
 
